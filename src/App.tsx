@@ -6,6 +6,7 @@ import {
 } from "./components/radio-player";
 import { bindRadioStoreToAudioElement } from "./stores/radio";
 import { RadioStationsList } from "./components/radio-stations";
+import { RadioStationForm } from "@/components/radio-station-form";
 import { Layout } from "./components/layout";
 
 function App() {
@@ -28,6 +29,9 @@ function App() {
       }
     >
       <div className="container mx-auto py-8 max-w-4xl flex flex-col gap-4">
+        <div className="flex justify-end">
+          <RadioStationForm />
+        </div>
         <RadioStationsList />
       </div>
     </Layout>
