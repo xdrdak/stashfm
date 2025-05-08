@@ -20,8 +20,9 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Trash2, Edit, PlayCircle } from "lucide-react";
 import { useSnapshot } from "valtio";
-import { radioStationsStore, deleteRadioStation } from "@/stores/radio-stations";
+import { radioStationsStore, deleteRadioStation, StreamEntry } from "@/stores/radio-stations";
 import { playFromUrl } from "@/stores/radio";
+import { openRadioStationForm } from "@/stores/radio-station-form";
 
 export const RadioStationsList = () => {
   const radioStationSnap = useSnapshot(radioStationsStore);
@@ -69,7 +70,12 @@ export const RadioStationsList = () => {
                   </TableCell>
                   <TableCell>
                     <div className="flex space-x-2">
-                      <Button aria-label="edit" variant="ghost" size="icon">
+                      <Button
+                        aria-label="edit"
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => openRadioStationForm("edit", entry)}
+                      >
                         <Edit className="h-4 w-4" />
                       </Button>
                       <AlertDialog>

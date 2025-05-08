@@ -12,60 +12,64 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { PlusCircle } from "lucide-react";
-import { useRef, useState } from "react";
-import { addRadioStation } from "@/stores/radio-stations";
+import { useSnapshot } from "valtio";
+import {
+  radioStationFormStore,
+  openRadioStationForm,
+  closeRadioStationForm,
+  updateRadioStationFormField,
+  resetRadioStationForm,
+} from "@/stores/radio-station-form";
+import { addRadioStation, updateRadioStation } from "@/stores/radio-stations";
 
 export function RadioStationForm() {
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const formRef = useRef<HTMLFormElement | null>(null);
+  const formSnap = useSnapshot(radioStationFormStore);
 
-  const resetForm = () => {
-    if (formRef.current) {
-      const form = formRef.current;
-      form.reset(); // Resets the form fields to their initial values
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const { url, name, description } = formSnap.formData;
+
+    if (!url.trim()) {
+      alert("Stream URL is required");
+      return;
     }
+
+    if (formSnap.mode === "add") {
+      addRadioStation({ url, name, description });
+    } else if (formSnap.mode === "edit" && formSnap.originalUrl) {
+      updateRadioStation(formSnap.originalUrl, { url, name, description });
+    }
+
+    closeRadioStationForm();
   };
 
   return (
-    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+    <Dialog
+      open={formSnap.isOpen}
+      onOpenChange={(open) => {
+        if (!open) {
+          closeRadioStationForm();
+        }
+        // Opening is handled by explicit calls to openRadioStationForm
+      }}
+    >
       <DialogTrigger asChild>
-        <Button variant="outline" onClick={() => setIsDialogOpen(true)}>
+        <Button variant="outline" onClick={() => openRadioStationForm("add")}>
           <PlusCircle className="mr-2 h-4 w-4" /> Add New Station
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Add New Radio Station</DialogTitle>
+          <DialogTitle>
+            {formSnap.mode === "add" ? "Add New Radio Station" : "Edit Radio Station"}
+          </DialogTitle>
           <DialogDescription>
-            Fill in the details for the new radio station stream. Click submit when
-            you're done.
+            {formSnap.mode === "add"
+              ? "Fill in the details for the new radio station stream. Click submit when you're done."
+              : "Update the details for the radio station stream. Click submit when you're done."}
           </DialogDescription>
         </DialogHeader>
-        <form
-          ref={formRef}
-          action={(formData) => {
-            const url = formData.get("url")?.toString() ?? "";
-            const name = formData.get("name")?.toString() ?? "";
-            const description = formData.get("description")?.toString() ?? "";
-
-            if (!url.trim()) {
-              alert("Stream URL is required");
-              return;
-            }
-
-            // Add new entry to the table
-            addRadioStation({
-              url,
-              name,
-              description,
-            });
-
-            // Clear form after successful submission
-            resetForm();
-            setIsDialogOpen(false); // Close dialog after submission
-          }}
-          className="space-y-4 py-4"
-        >
+        <form onSubmit={handleSubmit} className="space-y-4 py-4">
           <div className="space-y-2">
             <Label htmlFor="url">
               Stream URL <span className="text-red-500">*</span>
@@ -75,12 +79,20 @@ export function RadioStationForm() {
               name="url"
               placeholder="Enter stream URL"
               required
+              value={formSnap.formData.url}
+              onChange={(e) => updateRadioStationFormField("url", e.target.value)}
             />
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="name">Stream Name</Label>
-            <Input id="name" name="name" placeholder="Enter stream name" />
+            <Input
+              id="name"
+              name="name"
+              placeholder="Enter stream name"
+              value={formSnap.formData.name}
+              onChange={(e) => updateRadioStationFormField("name", e.target.value)}
+            />
           </div>
 
           <div className="space-y-2">
@@ -90,13 +102,19 @@ export function RadioStationForm() {
               name="description"
               placeholder="Enter description"
               rows={3}
+              value={formSnap.formData.description}
+              onChange={(e) =>
+                updateRadioStationFormField("description", e.target.value)
+              }
             />
           </div>
           <DialogFooter>
-            <Button type="button" variant="outline" onClick={resetForm}>
+            <Button type="button" variant="outline" onClick={resetRadioStationForm}>
               Reset
             </Button>
-            <Button type="submit">Submit</Button>
+            <Button type="submit">
+              {formSnap.mode === "add" ? "Submit" : "Save Changes"}
+            </Button>
           </DialogFooter>
         </form>
       </DialogContent>
