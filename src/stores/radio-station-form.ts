@@ -23,11 +23,17 @@ export const radioStationFormStore = proxy<RadioStationFormState>({
   originalUrl: undefined,
 });
 
-export function openRadioStationForm(mode: FormMode, stationUrl?: string) {
+// Overload signatures
+export function openRadioStationForm(mode: "add"): void;
+export function openRadioStationForm(mode: "edit", stationUrl: string): void;
+
+// Implementation signature
+export function openRadioStationForm(mode: FormMode, stationUrl?: string): void {
   radioStationFormStore.mode = mode;
-  if (mode === "edit" && stationUrl) {
+  if (mode === "edit") {
+    // stationUrl is guaranteed to be a string here by the overload signature if mode is 'edit'
     const stationToEdit = radioStationsStore.stations.find(
-      (s) => s.url === stationUrl
+      (s) => s.url === stationUrl! // Non-null assertion as TS knows it's string here
     );
     if (stationToEdit) {
       radioStationFormStore.formData = { ...stationToEdit };
@@ -35,14 +41,14 @@ export function openRadioStationForm(mode: FormMode, stationUrl?: string) {
     } else {
       // Station not found, perhaps log an error or handle gracefully
       // For now, reset to add mode or keep dialog closed
-      console.error(`Station with URL "${stationUrl}" not found for editing.`);
+      console.error(`Station with URL "${stationUrl!}" not found for editing.`);
       radioStationFormStore.formData = { ...initialFormData };
       radioStationFormStore.originalUrl = undefined;
       radioStationFormStore.isOpen = false; // Don't open if station not found
       return; // Exit early
     }
-  } else {
-    // For 'add' mode or if 'edit' mode is called without a URL (should not happen for edit)
+  } else if (mode === "add") {
+    // For 'add' mode
     radioStationFormStore.formData = { ...initialFormData };
     radioStationFormStore.originalUrl = undefined;
   }
