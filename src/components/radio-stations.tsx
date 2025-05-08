@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Trash2, Edit, PlayCircle } from "lucide-react";
 import { useSnapshot } from "valtio";
-import { radioStationsStore, deleteRadioStation, StreamEntry } from "@/stores/radio-stations";
+import { radioStationsStore, deleteRadioStation } from "@/stores/radio-stations";
 import { playFromUrl } from "@/stores/radio";
 import { openRadioStationForm } from "@/stores/radio-station-form";
 
