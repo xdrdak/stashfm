@@ -5,8 +5,8 @@ import {
   RadioPlayerStatus,
 } from "./components/radio-player";
 import { bindRadioStoreToAudioElement } from "./stores/radio";
-import { RadioStations, RadioStationsList } from "./components/radio-stations";
-import { Layout } from "./components/Layout";
+import { RadioStationsList } from "./components/radio-stations";
+import { Layout } from "./components/layout";
 
 function App() {
   useEffect(() => {
@@ -28,7 +28,6 @@ function App() {
       }
     >
       <div className="container mx-auto py-8 max-w-4xl flex flex-col gap-4">
-        <RadioStations />
         <RadioStationsList />
       </div>
     </Layout>
