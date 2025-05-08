@@ -74,7 +74,7 @@ export const RadioStationsList = () => {
                         aria-label="edit"
                         variant="ghost"
                         size="icon"
-                        onClick={() => openRadioStationForm("edit", entry.url)}
+                        onClick={() => openRadioStationForm({ mode: "edit", stationUrl: entry.url })}
                       >
                         <Edit className="h-4 w-4" />
                       </Button>

@@ -23,17 +23,26 @@ export const radioStationFormStore = proxy<RadioStationFormState>({
   originalUrl: undefined,
 });
 
-// Overload signatures
-export function openRadioStationForm(mode: "add"): void;
-export function openRadioStationForm(mode: "edit", stationUrl: string): void;
+type OpenFormBaseOptions = {
+  mode: FormMode;
+};
 
-// Implementation signature
-export function openRadioStationForm(mode: FormMode, stationUrl?: string): void {
-  radioStationFormStore.mode = mode;
-  if (mode === "edit") {
-    // stationUrl is guaranteed to be a string here by the overload signature if mode is 'edit'
+type OpenFormAddOptions = OpenFormBaseOptions & {
+  mode: "add";
+};
+
+type OpenFormEditOptions = OpenFormBaseOptions & {
+  mode: "edit";
+  stationUrl: string;
+};
+
+export type OpenRadioStationFormOptions = OpenFormAddOptions | OpenFormEditOptions;
+
+export function openRadioStationForm(options: OpenRadioStationFormOptions): void {
+  radioStationFormStore.mode = options.mode;
+  if (options.mode === "edit") {
     const stationToEdit = radioStationsStore.stations.find(
-      (s) => s.url === stationUrl! // Non-null assertion as TS knows it's string here
+      (s) => s.url === options.stationUrl
     );
     if (stationToEdit) {
       radioStationFormStore.formData = { ...stationToEdit };
@@ -41,13 +50,13 @@ export function openRadioStationForm(mode: FormMode, stationUrl?: string): void 
     } else {
       // Station not found, perhaps log an error or handle gracefully
       // For now, reset to add mode or keep dialog closed
-      console.error(`Station with URL "${stationUrl!}" not found for editing.`);
+      console.error(`Station with URL "${options.stationUrl}" not found for editing.`);
       radioStationFormStore.formData = { ...initialFormData };
       radioStationFormStore.originalUrl = undefined;
       radioStationFormStore.isOpen = false; // Don't open if station not found
       return; // Exit early
     }
-  } else if (mode === "add") {
+  } else if (options.mode === "add") {
     // For 'add' mode
     radioStationFormStore.formData = { ...initialFormData };
     radioStationFormStore.originalUrl = undefined;

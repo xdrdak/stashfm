@@ -53,7 +53,7 @@ export function RadioStationForm() {
       }}
     >
       <DialogTrigger asChild>
-        <Button variant="outline" onClick={() => openRadioStationForm("add")}>
+        <Button variant="outline" onClick={() => openRadioStationForm({ mode: "add" })}>
           <PlusCircle className="mr-2 h-4 w-4" /> Add New Station
         </Button>
       </DialogTrigger>
