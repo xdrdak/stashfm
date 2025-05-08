@@ -53,10 +53,10 @@ export const RadioStationsList = () => {
                     </TableCell>
                     <TableCell>
                       <div className="flex space-x-2">
-                        <Button variant="ghost" size="icon">
+                        <Button aria-label="edit" variant="ghost" size="icon">
                           <Edit className="h-4 w-4" />
                         </Button>
-                        <Button variant="ghost" size="icon">
+                        <Button aria-label="delete" variant="ghost" size="icon">
                           <Trash2 className="h-4 w-4" />
                         </Button>
                       </div>
