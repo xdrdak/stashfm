@@ -3,6 +3,15 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
   Table,
   TableBody,
   TableCell,
@@ -10,8 +19,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Trash2, Edit, PlayCircle } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+import { Trash2, Edit, PlayCircle, PlusCircle } from "lucide-react";
 import { useSnapshot } from "valtio";
 import { useRef } from "react";
 import { addRadioStation, radioStationsStore } from "@/stores/radio-stations";
@@ -33,75 +41,81 @@ export function RadioStations() {
   };
 
   return (
-    <>
-      <Card className="shadow-lg">
-        <CardHeader>
-          <CardTitle className="text-center">Stream Form</CardTitle>
-        </CardHeader>
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button variant="outline">
+          <PlusCircle className="mr-2 h-4 w-4" /> Add New Station
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle>Add New Radio Station</DialogTitle>
+          <DialogDescription>
+            Fill in the details for the new radio station stream. Click submit when
+            you're done.
+          </DialogDescription>
+        </DialogHeader>
+        <form
+          ref={formRef}
+          action={(formData) => {
+            const url = formData.get("url")?.toString() ?? "";
+            const name = formData.get("name")?.toString() ?? "";
+            const description = formData.get("description")?.toString() ?? "";
 
-        <CardContent className="space-y-4">
-          <form
-            ref={formRef}
-            action={(formData) => {
-              const url = formData.get("url")?.toString() ?? "";
-              const name = formData.get("name")?.toString() ?? "";
-              const description = formData.get("description")?.toString() ?? "";
+            if (!url.trim()) {
+              alert("Stream URL is required");
+              return;
+            }
 
-              if (!url.trim()) {
-                alert("Stream URL is required");
-                return;
-              }
+            // Add new entry to the table
+            addRadioStation({
+              id: Date.now(),
+              url,
+              name,
+              description,
+            });
 
-              // Add new entry to the table
-              addRadioStation({
-                id: Date.now(),
-                url,
-                name,
-                description,
-              });
+            // Clear form after successful submission
+            resetForm();
+            // TODO: Close dialog after submission
+          }}
+          className="space-y-4 py-4"
+        >
+          <div className="space-y-2">
+            <Label htmlFor="url">
+              Stream URL <span className="text-red-500">*</span>
+            </Label>
+            <Input
+              id="url"
+              name="url"
+              placeholder="Enter stream URL"
+              required
+            />
+          </div>
 
-              // Clear form after successful submission
-              resetForm();
-            }}
-            className="space-y-4"
-          >
-            <div className="space-y-2">
-              <Label htmlFor="url">
-                Stream URL <span className="text-red-500">*</span>
-              </Label>
-              <Input
-                id="url"
-                name="url"
-                placeholder="Enter stream URL"
-                required
-              />
-            </div>
+          <div className="space-y-2">
+            <Label htmlFor="name">Stream Name</Label>
+            <Input id="name" name="name" placeholder="Enter stream name" />
+          </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="name">Stream Name</Label>
-              <Input id="name" name="name" placeholder="Enter stream name" />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="description">Description</Label>
-              <Textarea
-                id="description"
-                name="description"
-                placeholder="Enter description"
-                rows={3}
-              />
-            </div>
-
-            <div className="flex justify-end space-x-2 pt-4">
-              <Button type="button" variant="outline" onClick={resetForm}>
-                Reset
-              </Button>
-              <Button type="submit">Submit</Button>
-            </div>
-          </form>
-        </CardContent>
-      </Card>
-    </>
+          <div className="space-y-2">
+            <Label htmlFor="description">Description</Label>
+            <Textarea
+              id="description"
+              name="description"
+              placeholder="Enter description"
+              rows={3}
+            />
+          </div>
+          <DialogFooter>
+            <Button type="button" variant="outline" onClick={resetForm}>
+              Reset
+            </Button>
+            <Button type="submit">Submit</Button>
+          </DialogFooter>
+        </form>
+      </DialogContent>
+    </Dialog>
   );
 }
 
@@ -111,7 +125,7 @@ export const RadioStationsList = () => {
   return (
     <>
       {radioStationSnap.stations.length > 0 && (
-        <Card className="shadow-lg">
+        <div>
           <Table>
             <TableHeader>
               <TableRow>
@@ -159,7 +173,7 @@ export const RadioStationsList = () => {
               })}
             </TableBody>
           </Table>
-        </Card>
+        </div>
       )}
     </>
   );
