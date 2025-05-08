@@ -23,12 +23,26 @@ export const radioStationFormStore = proxy<RadioStationFormState>({
   originalUrl: undefined,
 });
 
-export function openRadioStationForm(mode: FormMode, station?: StreamEntry) {
+export function openRadioStationForm(mode: FormMode, stationUrl?: string) {
   radioStationFormStore.mode = mode;
-  if (mode === "edit" && station) {
-    radioStationFormStore.formData = { ...station };
-    radioStationFormStore.originalUrl = station.url;
+  if (mode === "edit" && stationUrl) {
+    const stationToEdit = radioStationsStore.stations.find(
+      (s) => s.url === stationUrl
+    );
+    if (stationToEdit) {
+      radioStationFormStore.formData = { ...stationToEdit };
+      radioStationFormStore.originalUrl = stationToEdit.url;
+    } else {
+      // Station not found, perhaps log an error or handle gracefully
+      // For now, reset to add mode or keep dialog closed
+      console.error(`Station with URL "${stationUrl}" not found for editing.`);
+      radioStationFormStore.formData = { ...initialFormData };
+      radioStationFormStore.originalUrl = undefined;
+      radioStationFormStore.isOpen = false; // Don't open if station not found
+      return; // Exit early
+    }
   } else {
+    // For 'add' mode or if 'edit' mode is called without a URL (should not happen for edit)
     radioStationFormStore.formData = { ...initialFormData };
     radioStationFormStore.originalUrl = undefined;
   }
