@@ -118,3 +118,28 @@
     @apply bg-background text-foreground;
   }
 }
+
+.color-shifting-background {
+  animation: colorShift 30s infinite;
+}
+
+@keyframes colorShift {
+  0% {
+    background-color: rgb(100, 100, 200);
+  }
+  20% {
+    background-color: rgb(100, 200, 150);
+  }
+  40% {
+    background-color: rgb(200, 100, 150);
+  }
+  60% {
+    background-color: rgb(150, 150, 250);
+  }
+  80% {
+    background-color: rgb(200, 150, 100);
+  }
+  100% {
+    background-color: rgb(100, 100, 200);
+  }
+}

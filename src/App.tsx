@@ -1,7 +1,38 @@
-import RadioPlayer from "./components/radio-player";
+import { useEffect } from "react";
+import {
+  RadioPlayPauseButton,
+  RadioVolumeControl,
+  RadioPlayerStatus,
+} from "./components/radio-player";
+import { bindRadioStoreToAudioElement } from "./stores/radio";
+import { RadioStations, RadioStationsList } from "./components/radio-stations";
+import { Layout } from "./components/Layout";
 
 function App() {
-  return <RadioPlayer />;
+  useEffect(() => {
+    const destroy = bindRadioStoreToAudioElement();
+    // Clean up event listeners on unmount
+    return () => {
+      destroy();
+    };
+  }, []);
+
+  return (
+    <Layout
+      barContent={
+        <div className="flex items-center gap-3">
+          <RadioPlayPauseButton />
+          <RadioVolumeControl />
+          <RadioPlayerStatus />
+        </div>
+      }
+    >
+      <div className="container mx-auto py-8 max-w-4xl flex flex-col gap-4">
+        <RadioStations />
+        <RadioStationsList />
+      </div>
+    </Layout>
+  );
 }
 
 export default App;
