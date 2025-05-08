@@ -12,10 +12,11 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { PlusCircle } from "lucide-react";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { addRadioStation } from "@/stores/radio-stations";
 
 export function RadioStationForm() {
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const formRef = useRef<HTMLFormElement | null>(null);
 
   const resetForm = () => {
@@ -33,9 +34,9 @@ export function RadioStationForm() {
   };
 
   return (
-    <Dialog>
+    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline">
+        <Button variant="outline" onClick={() => setIsDialogOpen(true)}>
           <PlusCircle className="mr-2 h-4 w-4" /> Add New Station
         </Button>
       </DialogTrigger>
@@ -69,7 +70,7 @@ export function RadioStationForm() {
 
             // Clear form after successful submission
             resetForm();
-            // TODO: Close dialog after submission
+            setIsDialogOpen(false); // Close dialog after submission
           }}
           className="space-y-4 py-4"
         >
