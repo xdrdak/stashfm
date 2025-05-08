@@ -7,6 +7,17 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { Trash2, Edit, PlayCircle } from "lucide-react";
 import { useSnapshot } from "valtio";
 import { radioStationsStore, deleteRadioStation } from "@/stores/radio-stations";
@@ -61,14 +72,37 @@ export const RadioStationsList = () => {
                       <Button aria-label="edit" variant="ghost" size="icon">
                         <Edit className="h-4 w-4" />
                       </Button>
-                      <Button
-                        aria-label="delete"
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => deleteRadioStation(entry.url)}
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
+                      <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                          <Button
+                            aria-label="delete"
+                            variant="ghost"
+                            size="icon"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>
+                              Are you sure?
+                            </AlertDialogTitle>
+                            <AlertDialogDescription>
+                              This action cannot be undone. This will
+                              permanently delete the station "
+                              {streamName}".
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogAction
+                              onClick={() => deleteRadioStation(entry.url)}
+                            >
+                              Delete
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
                     </div>
                   </TableCell>
                 </TableRow>
