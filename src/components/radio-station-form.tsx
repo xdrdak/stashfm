@@ -22,13 +22,6 @@ export function RadioStationForm() {
   const resetForm = () => {
     if (formRef.current) {
       const form = formRef.current;
-
-      // Create a new FormData object to iterate over keys, then reset the actual form
-      const formData = new FormData(form);
-      for (const key of formData.keys()) {
-        // This doesn't actually clear the form fields in the DOM for uncontrolled components.
-        // form.reset() is more standard.
-      }
       form.reset(); // Resets the form fields to their initial values
     }
   };
