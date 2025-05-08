@@ -20,7 +20,10 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Trash2, Edit, PlayCircle } from "lucide-react";
 import { useSnapshot } from "valtio";
-import { radioStationsStore, deleteRadioStation } from "@/stores/radio-stations";
+import {
+  radioStationsStore,
+  deleteRadioStation,
+} from "@/stores/radio-stations";
 import { playFromUrl } from "@/stores/radio";
 import { openRadioStationForm } from "@/stores/radio-station-form";
 
@@ -47,7 +50,13 @@ export const RadioStationsList = () => {
             </TableRow>
           ) : (
             radioStationSnap.stations.map((entry) => {
-              const streamName = entry.name || new URL(entry.url).host;
+              const url = new URL(entry.url);
+
+              let streamName = entry.name;
+
+              if (!streamName) {
+                streamName = url.host;
+              }
 
               return (
                 <TableRow key={entry.url}>
@@ -64,7 +73,14 @@ export const RadioStationsList = () => {
                       <PlayCircle className="h-4 w-4" />
                     </Button>
                   </TableCell>
-                  <TableCell>{streamName}</TableCell>
+                  <TableCell>
+                    <div className="flex flex-col gap-1">
+                      <span className="font-medium">{streamName}</span>
+                      <span className="text-xs text-gray-700">
+                        {[url.host, url.pathname].join("")}
+                      </span>
+                    </div>
+                  </TableCell>
                   <TableCell className="max-w-xs truncate">
                     {entry.description}
                   </TableCell>
@@ -74,7 +90,12 @@ export const RadioStationsList = () => {
                         aria-label="edit"
                         variant="ghost"
                         size="icon"
-                        onClick={() => openRadioStationForm({ mode: "edit", stationUrl: entry.url })}
+                        onClick={() =>
+                          openRadioStationForm({
+                            mode: "edit",
+                            stationUrl: entry.url,
+                          })
+                        }
                       >
                         <Edit className="h-4 w-4" />
                       </Button>
@@ -90,13 +111,10 @@ export const RadioStationsList = () => {
                         </AlertDialogTrigger>
                         <AlertDialogContent>
                           <AlertDialogHeader>
-                            <AlertDialogTitle>
-                              Are you sure?
-                            </AlertDialogTitle>
+                            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
                             <AlertDialogDescription>
                               This action cannot be undone. This will
-                              permanently delete the station "
-                              {streamName}".
+                              permanently delete the station "{streamName}".
                             </AlertDialogDescription>
                           </AlertDialogHeader>
                           <AlertDialogFooter>
