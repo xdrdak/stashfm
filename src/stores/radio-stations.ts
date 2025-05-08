@@ -1,7 +1,6 @@
 import { proxy } from "valtio";
 
 type StreamEntry = {
-  id: number;
   url: string;
   name: string;
   description: string;
@@ -14,7 +13,6 @@ type RadioStationsStore = {
 export const radioStationsStore = proxy<RadioStationsStore>({
   stations: [
     {
-      id: 1,
       url: "https://stream.rovr.live/live-01",
       description: "",
       name: "",
@@ -22,10 +20,9 @@ export const radioStationsStore = proxy<RadioStationsStore>({
   ],
 });
 
-export const addRadioStation = (entry: StreamEntry) => {
+export const addRadioStation = (entry: Omit<StreamEntry, "id">) => {
   // Add new entry to the table
   const newEntry: StreamEntry = {
-    id: entry.id,
     url: entry.url,
     name: entry.name,
     description: entry.description,
@@ -34,8 +31,8 @@ export const addRadioStation = (entry: StreamEntry) => {
   radioStationsStore.stations.push(newEntry);
 };
 
-export const deleteRadioStation = (id: number) => {
+export const deleteRadioStation = (url: string) => {
   radioStationsStore.stations = radioStationsStore.stations.filter(
-    (station) => station.id !== id
+    (station) => station.url !== url
   );
 };

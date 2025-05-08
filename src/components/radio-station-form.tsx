@@ -55,7 +55,6 @@ export function RadioStationForm() {
 
             // Add new entry to the table
             addRadioStation({
-              id: Date.now(),
               url,
               name,
               description,

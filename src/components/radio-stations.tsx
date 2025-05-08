@@ -33,7 +33,7 @@ export const RadioStationsList = () => {
                 const streamName = entry.name || new URL(entry.url).host;
 
                 return (
-                  <TableRow key={entry.id}>
+                  <TableRow key={entry.url}>
                     <TableCell>
                       <Button
                         variant="ghost"
@@ -60,7 +60,7 @@ export const RadioStationsList = () => {
                           aria-label="delete"
                           variant="ghost"
                           size="icon"
-                          onClick={() => deleteRadioStation(entry.id)}
+                          onClick={() => deleteRadioStation(entry.url)}
                         >
                           <Trash2 className="h-4 w-4" />
                         </Button>
