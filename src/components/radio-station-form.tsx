@@ -50,7 +50,6 @@ export function RadioStationForm() {
         if (!open) {
           closeRadioStationForm();
         }
-        // Opening is handled by explicit calls to openRadioStationForm
       }}
     >
       <DialogTrigger asChild>
