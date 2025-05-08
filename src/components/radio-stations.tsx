@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/table";
 import { Trash2, Edit, PlayCircle } from "lucide-react";
 import { useSnapshot } from "valtio";
-import { radioStationsStore } from "@/stores/radio-stations";
+import { radioStationsStore, deleteRadioStation } from "@/stores/radio-stations";
 import { playFromUrl } from "@/stores/radio";
 
 export const RadioStationsList = () => {
@@ -56,7 +56,12 @@ export const RadioStationsList = () => {
                         <Button aria-label="edit" variant="ghost" size="icon">
                           <Edit className="h-4 w-4" />
                         </Button>
-                        <Button aria-label="delete" variant="ghost" size="icon">
+                        <Button
+                          aria-label="delete"
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => deleteRadioStation(entry.id)}
+                        >
                           <Trash2 className="h-4 w-4" />
                         </Button>
                       </div>

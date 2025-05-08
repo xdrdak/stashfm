@@ -33,3 +33,9 @@ export const addRadioStation = (entry: StreamEntry) => {
 
   radioStationsStore.stations.push(newEntry);
 };
+
+export const deleteRadioStation = (id: number) => {
+  radioStationsStore.stations = radioStationsStore.stations.filter(
+    (station) => station.id !== id
+  );
+};
