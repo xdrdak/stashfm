@@ -18,9 +18,9 @@ describe('RadioStationsList', () => {
     // No specific user interaction is needed for this test after the initial render.
 
     // ASSERT
-    // Note: The message "No stations available. Add one to get started!" is an assumption.
-    // Please adjust it if your component uses a different message.
-    const noStationsMessage = await screen.findByText("No stations available. Add one to get started!");
+    // Note: The component is expected to display "No stations available." when empty.
+    // Please adjust this text if the component's actual message differs.
+    const noStationsMessage = await screen.findByText("No stations available.");
     expect(noStationsMessage).toBeInTheDocument();
   });
 });
