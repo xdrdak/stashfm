@@ -8,6 +8,7 @@ import { radioStore } from "@/stores/radio";
 
 export function Layout(props: {
   barContent: React.ReactNode;
+  expanderContent: React.ReactNode;
   children: React.ReactNode;
 }) {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -16,23 +17,7 @@ export function Layout(props: {
     setIsExpanded(!isExpanded);
   };
 
-  // Move this effect to a seperate function within this same file AI!
-  useEffect(() => {
-    const unsubscribe = subscribe(radioStore, () => {
-      const pageLayout = document.getElementById("page-layout");
-      if (pageLayout) {
-        if (radioStore.isPlaying === true) {
-          pageLayout.style.animationPlayState = "running";
-        } else {
-          pageLayout.style.animationPlayState = "paused";
-        }
-      }
-    });
-
-    return () => {
-      unsubscribe();
-    };
-  }, []);
+  usePageLayoutAnimation();
 
   return (
     <div
@@ -42,7 +27,7 @@ export function Layout(props: {
         animationPlayState: "paused",
       }}
     >
-      <main className="flex-grow">{/* Main content area */}</main>
+      <main className="flex-grow">{props.children}</main>
 
       {/* Sticky footer */}
       <footer
@@ -50,7 +35,7 @@ export function Layout(props: {
           isExpanded ? "h-[90vh] overflow-hidden" : "h-16"
         }`}
       >
-        <div className="container mx-auto px-4 h-16 flex items-center justify-between gap-8">
+        <div className="container mx-auto px-4 h-16 flex items-center justify-between gap-6">
           <div className="flex-1">{props.barContent}</div>
           <Button
             className="w-8"
@@ -74,10 +59,29 @@ export function Layout(props: {
           } border-t border-t-gray-300 border-solid`}
         >
           <div className="container mx-auto px-4 h-full py-4">
-            {props.children}
+            {props.expanderContent}
           </div>
         </div>
       </footer>
     </div>
   );
+}
+
+function usePageLayoutAnimation() {
+  useEffect(() => {
+    const unsubscribe = subscribe(radioStore, () => {
+      const pageLayout = document.getElementById("page-layout");
+      if (pageLayout) {
+        if (radioStore.isPlaying === true) {
+          pageLayout.style.animationPlayState = "running";
+        } else {
+          pageLayout.style.animationPlayState = "paused";
+        }
+      }
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, []);
 }

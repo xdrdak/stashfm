@@ -1,8 +1,8 @@
 import { describe, test, beforeEach, expect } from "vitest";
 import "@testing-library/jest-dom";
 import { render, screen } from "@testing-library/react";
-import { RadioStationsList } from "./radio-stations";
-import { radioStationsStore } from "../stores/radio-stations";
+import { RadioStationsList } from "./radio-stations-list";
+import { radioStationsStore } from "../../stores/radio-stations";
 
 describe("RadioStationsList", () => {
   beforeEach(() => {

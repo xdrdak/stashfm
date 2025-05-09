@@ -18,14 +18,14 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Trash2, Edit, PlayCircle } from "lucide-react";
+import { Trash2, Edit } from "lucide-react";
 import { useSnapshot } from "valtio";
 import {
   radioStationsStore,
   deleteRadioStation,
 } from "@/stores/radio-stations";
-import { playFromUrl } from "@/stores/radio";
 import { openRadioStationForm } from "@/stores/radio-station-form";
+import { RadioPlayFromUrlButton } from "../radio-player/radio-play-from-url-button";
 
 export const RadioStationsList = () => {
   const radioStationSnap = useSnapshot(radioStationsStore);
@@ -61,17 +61,7 @@ export const RadioStationsList = () => {
               return (
                 <TableRow key={entry.url}>
                   <TableCell>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => {
-                        playFromUrl({
-                          url: entry.url,
-                        });
-                      }}
-                    >
-                      <PlayCircle className="h-4 w-4" />
-                    </Button>
+                    <RadioPlayFromUrlButton url={entry.url} />
                   </TableCell>
                   <TableCell>
                     <div className="flex flex-col gap-1">

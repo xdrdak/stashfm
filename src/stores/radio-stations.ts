@@ -1,17 +1,23 @@
-import { proxy } from "valtio";
+import { proxy, subscribe } from "valtio";
+import z from "zod";
 
-export type StreamEntry = {
-  // Export the type
-  url: string;
-  name: string;
-  description: string;
-};
+const StreamEntrySchema = z.object({
+  url: z.string(),
+  name: z.string(),
+  description: z.string(),
+});
 
-type RadioStationsStore = {
-  stations: StreamEntry[];
-};
+export type StreamEntry = z.infer<typeof StreamEntrySchema>;
 
-export const radioStationsStore = proxy<RadioStationsStore>({
+export const RadioStationStoreSchema = z.object({
+  owner: z.string(),
+  stations: z.array(StreamEntrySchema),
+});
+
+export type RadioStationsStore = z.infer<typeof RadioStationStoreSchema>;
+
+const initialState = {
+  owner: "anonymous",
   stations: [
     {
       url: "https://stream.rovr.live/live-01",
@@ -134,7 +140,11 @@ export const radioStationsStore = proxy<RadioStationsStore>({
       name: "Field Recordings",
     },
   ],
-});
+} satisfies RadioStationsStore;
+
+export const radioStationsStore = proxy<RadioStationsStore>(
+  loadStoreFromLocalStorage("anonymous")
+);
 
 export const addRadioStation = (station: StreamEntry) => {
   const existingStation = radioStationsStore.stations.find(
@@ -186,3 +196,36 @@ export function updateRadioStation(
     alert("Error: Could not find the station to update.");
   }
 }
+
+export function setRadioStationStore(store: RadioStationsStore) {
+  radioStationsStore.owner = store.owner;
+  radioStationsStore.stations = store.stations;
+}
+
+function getLocalStorageKey(user: string) {
+  const key = `stations:${user}`;
+  return key;
+}
+
+export function loadStoreFromLocalStorage(user: string): RadioStationsStore {
+  const result = RadioStationStoreSchema.safeParse(
+    JSON.parse(localStorage.getItem(getLocalStorageKey(user)) ?? "")
+  );
+
+  if (result.success) {
+    return result.data;
+  }
+
+  return initialState;
+}
+
+function persistRadioStationStore() {
+  window.localStorage.setItem(
+    getLocalStorageKey(radioStationsStore.owner),
+    JSON.stringify(radioStationsStore.stations)
+  );
+}
+
+subscribe(radioStationsStore, () => {
+  persistRadioStationStore();
+});

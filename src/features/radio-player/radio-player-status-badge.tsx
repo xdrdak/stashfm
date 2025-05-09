@@ -10,14 +10,14 @@ export const RadioPlayerStatusBadge = () => {
   let message = "No station selected";
 
   if (snap.isBuffering) {
-    message = "Buffering...";
-  }
-
-  if (snap.isPlaying) {
-    message = `Listening to ${snap.streamUrl}`;
-  }
-  if (!snap.isPlaying && snap.streamUrl) {
-    message = `Paused on ${snap.streamUrl}`;
+    message = `Buffering ${snap.streamUrl}`;
+  } else {
+    if (snap.isPlaying) {
+      message = `Listening to ${snap.streamUrl}`;
+    }
+    if (!snap.isPlaying && snap.streamUrl) {
+      message = `Paused on ${snap.streamUrl}`;
+    }
   }
 
   return (
