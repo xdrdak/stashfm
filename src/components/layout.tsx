@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { ChevronUp, ChevronDown } from "lucide-react";
-// Gener
+
 export function Layout(props: {
   barContent: React.ReactNode;
   children: React.ReactNode;
