@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ChevronUp, ChevronDown } from "lucide-react";
 
@@ -8,26 +8,9 @@ export function Layout(props: {
   barContent: React.ReactNode;
   children: React.ReactNode;
 }) {
-  const [backgroundColor, setBackgroundColor] = useState("rgb(100, 100, 200)");
   const [isExpanded, setIsExpanded] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
 
-  // Function to generate a random RGB color
-  const generateRandomColor = () => {
-    const r = Math.floor(Math.random() * 256);
-    const g = Math.floor(Math.random() * 256);
-    const b = Math.floor(Math.random() * 256);
-    return `rgb(${r}, ${g}, ${b})`;
-  };
-
-  // Change background color every 3 seconds
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setBackgroundColor(generateRandomColor());
-    }, 3000);
-
-    return () => clearInterval(interval);
-  }, []);
 
   const toggleExpand = () => {
     setIsTransitioning(true);
@@ -40,13 +23,7 @@ export function Layout(props: {
   };
 
   return (
-    <div
-      className="min-h-screen flex flex-col relative overflow-hidden"
-      style={{
-        backgroundColor,
-        transition: "background-color 2s ease",
-      }}
-    >
+    <div className="min-h-screen flex flex-col relative overflow-hidden color-shifting-background">
       <main className="flex-grow">{/* Main content area */}</main>
 
       {/* Sticky footer */}
