@@ -1,8 +1,10 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ChevronUp, ChevronDown } from "lucide-react";
+import { subscribe } from "valtio";
+import { radioStore } from "@/stores/radio";
 
 export function Layout(props: {
   barContent: React.ReactNode;
@@ -14,10 +16,31 @@ export function Layout(props: {
     setIsExpanded(!isExpanded);
   };
 
+  // Move this effect to a seperate function within this same file AI!
+  useEffect(() => {
+    const unsubscribe = subscribe(radioStore, () => {
+      const pageLayout = document.getElementById("page-layout");
+      if (pageLayout) {
+        if (radioStore.isPlaying === true) {
+          pageLayout.style.animationPlayState = "running";
+        } else {
+          pageLayout.style.animationPlayState = "paused";
+        }
+      }
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, []);
+
   return (
     <div
       id="page-layout"
       className="min-h-screen flex flex-col relative overflow-hidden color-shifting-background"
+      style={{
+        animationPlayState: "paused",
+      }}
     >
       <main className="flex-grow">{/* Main content area */}</main>
 
