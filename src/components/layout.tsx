@@ -9,16 +9,9 @@ export function Layout(props: {
   children: React.ReactNode;
 }) {
   const [isExpanded, setIsExpanded] = useState(false);
-  const [isTransitioning, setIsTransitioning] = useState(false);
 
   const toggleExpand = () => {
-    setIsTransitioning(true);
     setIsExpanded(!isExpanded);
-
-    // Reset transitioning state after animation completes
-    setTimeout(() => {
-      setIsTransitioning(false);
-    }, 500); // Match this with the transition duration
   };
 
   return (
@@ -31,8 +24,8 @@ export function Layout(props: {
       {/* Sticky footer */}
       <footer
         className={`sticky bottom-0 w-full bg-white dark:bg-gray-900 shadow-lg transition-all duration-500 ease-in-out ${
-          isExpanded ? "h-[90vh]" : "h-16"
-        } ${isTransitioning ? "overflow-hidden" : ""}`}
+          isExpanded ? "h-[90vh] overflow-hidden" : "h-16"
+        }`}
       >
         <div className="container mx-auto px-4 h-16 flex items-center justify-between gap-8">
           <div className="flex-1">{props.barContent}</div>
@@ -54,9 +47,7 @@ export function Layout(props: {
         {/* Expanded content with table */}
         <div
           className={`w-full h-[calc(90vh-4rem)] ${
-            isExpanded ? "block" : "hidden"
-          } ${
-            isTransitioning ? "overflow-hidden" : "overflow-y-auto"
+            isExpanded ? "block overflow-y-auto" : "hidden"
           } border-t border-t-gray-300 border-solid`}
         >
           <div className="container mx-auto px-4 h-full py-4">
