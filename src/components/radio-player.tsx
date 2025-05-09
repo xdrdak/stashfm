@@ -119,6 +119,19 @@ export const RadioVolumeControl = () => {
 export const RadioPlayerStatus = () => {
   const snap = useSnapshot(radioStore);
 
+  let message = "No station selected";
+
+  if (snap.isBuffering) {
+    message = "Buffering...";
+  }
+
+  if (snap.isPlaying) {
+    message = `Listening to ${snap.streamUrl}`;
+  }
+  if (!snap.isPlaying && snap.streamUrl) {
+    message = `Paused on ${snap.streamUrl}`;
+  }
+
   return (
     <div>
       {snap.error && snap.streamUrl !== "" && (
@@ -126,13 +139,7 @@ export const RadioPlayerStatus = () => {
           {snap.error}
         </div>
       )}
-      <Badge variant={snap.isPlaying ? "default" : "outline"}>
-        {snap.isBuffering
-          ? "Buffering..."
-          : snap.isPlaying
-          ? `Listening to ${snap.streamUrl}`
-          : "Stopped"}
-      </Badge>
+      <Badge variant={snap.isPlaying ? "default" : "outline"}>{message}</Badge>
     </div>
   );
 };
