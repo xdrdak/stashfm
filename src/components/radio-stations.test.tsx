@@ -18,6 +18,6 @@ describe("RadioStationsList", () => {
     // No specific user interaction is needed for this test after the initial render.
 
     // ASSERT
-    expect(screen.getByText("No stations available.")).toBeInTheDocument();
+    expect(screen.getByText("No stations available. Add a new station.")).toBeInTheDocument();
   });
 });
