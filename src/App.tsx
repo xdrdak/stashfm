@@ -21,10 +21,13 @@ function App() {
   return (
     <Layout
       barContent={
-        <div className="flex items-center gap-3">
-          <RadioPlayPauseButton />
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <RadioPlayPauseButton />
+            <RadioPlayerStatus />
+          </div>
+
           <RadioVolumeControl />
-          <RadioPlayerStatus />
         </div>
       }
     >

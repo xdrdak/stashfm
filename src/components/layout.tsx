@@ -55,9 +55,10 @@ export function Layout(props: {
           isExpanded ? "h-[90vh]" : "h-16"
         } ${isTransitioning ? "overflow-hidden" : ""}`}
       >
-        <div className="container mx-auto px-4 h-16 flex items-center justify-between ">
-          {props.barContent}
+        <div className="container mx-auto px-4 h-16 flex items-center justify-between gap-8">
+          <div className="flex-1">{props.barContent}</div>
           <Button
+            className="w-8"
             variant="ghost"
             size="icon"
             onClick={toggleExpand}

@@ -130,7 +130,7 @@ export const RadioPlayerStatus = () => {
         {snap.isBuffering
           ? "Buffering..."
           : snap.isPlaying
-          ? "Playing"
+          ? `Listening to ${snap.streamUrl}`
           : "Stopped"}
       </Badge>
     </div>
