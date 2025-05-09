@@ -11,7 +11,6 @@ export function Layout(props: {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
 
-
   const toggleExpand = () => {
     setIsTransitioning(true);
     setIsExpanded(!isExpanded);
@@ -23,7 +22,10 @@ export function Layout(props: {
   };
 
   return (
-    <div className="min-h-screen flex flex-col relative overflow-hidden color-shifting-background">
+    <div
+      id="page-layout"
+      className="min-h-screen flex flex-col relative overflow-hidden color-shifting-background"
+    >
       <main className="flex-grow">{/* Main content area */}</main>
 
       {/* Sticky footer */}
