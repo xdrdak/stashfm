@@ -208,9 +208,13 @@ function getLocalStorageKey(user: string) {
 }
 
 export function loadStoreFromLocalStorage(user: string): RadioStationsStore {
-  const result = RadioStationStoreSchema.safeParse(
-    JSON.parse(localStorage.getItem(getLocalStorageKey(user)) ?? "")
-  );
+  const item = localStorage.getItem(getLocalStorageKey(user)) ?? "";
+
+  if (!item) {
+    return initialState;
+  }
+
+  const result = RadioStationStoreSchema.safeParse(JSON.parse(item));
 
   if (result.success) {
     return result.data;
