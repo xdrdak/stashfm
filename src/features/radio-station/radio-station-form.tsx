@@ -17,7 +17,6 @@ import {
   radioStationFormStore,
   openRadioStationForm,
   closeRadioStationForm,
-  updateRadioStationFormField,
   resetRadioStationForm,
 } from "@/stores/radio-station-form";
 import { addRadioStation, updateRadioStation } from "@/stores/radio-stations";
@@ -27,7 +26,10 @@ export function RadioStationForm() {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const { url, name, description } = formSnap.formData;
+    const formData = new FormData(event.currentTarget);
+    const url = (formData.get("url") as string) || "";
+    const name = (formData.get("name") as string) || "";
+    const description = (formData.get("description") as string) || "";
 
     if (!url.trim()) {
       alert("Stream URL is required");
@@ -78,8 +80,7 @@ export function RadioStationForm() {
               name="url"
               placeholder="Enter stream URL"
               required
-              value={formSnap.formData.url}
-              onChange={(e) => updateRadioStationFormField("url", e.target.value)}
+              defaultValue={formSnap.formData.url}
             />
           </div>
 
@@ -89,8 +90,7 @@ export function RadioStationForm() {
               id="name"
               name="name"
               placeholder="Enter stream name"
-              value={formSnap.formData.name}
-              onChange={(e) => updateRadioStationFormField("name", e.target.value)}
+              defaultValue={formSnap.formData.name}
             />
           </div>
 
@@ -101,10 +101,7 @@ export function RadioStationForm() {
               name="description"
               placeholder="Enter description"
               rows={3}
-              value={formSnap.formData.description}
-              onChange={(e) =>
-                updateRadioStationFormField("description", e.target.value)
-              }
+              defaultValue={formSnap.formData.description}
             />
           </div>
           <DialogFooter>
