@@ -142,6 +142,7 @@ export const AuthenticationButton = () => {
               supabaseClient={supabase}
               providers={[]}
               appearance={{ theme: ThemeSupa }}
+              redirectTo={getRedirectToUrl()}
             />
           ) : (
             <Button onClick={handleSignOut} className="w-full">
@@ -153,3 +154,18 @@ export const AuthenticationButton = () => {
     </Dialog>
   );
 };
+
+function getRedirectToUrl() {
+  let url =
+    import.meta?.env?.NEXT_PUBLIC_SITE_URL ?? // Set this to your site URL in production env.
+    import.meta?.env?.NEXT_PUBLIC_VERCEL_URL; // Automatically set by Vercel.
+
+  if (!url) {
+    return undefined;
+  }
+
+  url = url.startsWith("http") ? url : `https://${url}`;
+  // Make sure to include a trailing `/`.
+  url = url.endsWith("/") ? url : `${url}/`;
+  return url;
+}

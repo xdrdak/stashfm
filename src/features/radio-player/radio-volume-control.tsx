@@ -31,7 +31,6 @@ export const RadioVolumeControl = () => {
         onValueChange={handleVolumeChange}
         className="w-24"
       />
-      <span className="text-xs w-8">{snap.volume}%</span>
     </div>
   );
 };

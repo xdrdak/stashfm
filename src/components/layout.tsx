@@ -32,10 +32,10 @@ export function Layout(props: {
       {/* Sticky footer */}
       <footer
         className={`sticky bottom-0 w-full bg-white dark:bg-gray-900 shadow-lg transition-all duration-500 ease-in-out ${
-          isExpanded ? "h-[90vh] overflow-hidden" : "h-16"
+          isExpanded ? "h-[90vh] overflow-hidden" : "md:h-16 h-18"
         }`}
       >
-        <div className="container mx-auto px-4 h-16 flex items-center justify-between gap-6">
+        <div className="container mx-auto px-4 md:h-16 h-18 flex items-center justify-between gap-6">
           <div className="flex-1">{props.barContent}</div>
           <Button
             className="w-8"

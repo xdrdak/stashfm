@@ -35,8 +35,8 @@ function App() {
           </div>
         }
         barContent={
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
+          <div className="flex md:items-center items-start flex-col md:flex-row justify-between gap-1">
+            <div className="flex items-center gap-3 sm:gap-0">
               <RadioPlayPauseButton />
               <RadioVolumeControl />
             </div>

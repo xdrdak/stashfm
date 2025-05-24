@@ -13,7 +13,6 @@ export const RadioPlayPauseButton = () => {
       onClick={handlePlayPause}
       variant="outline"
       disabled={(snap.isBuffering && !snap.isPlaying) || !snap.streamUrl}
-      className="w-24"
     >
       {snap.isBuffering && !snap.isPlaying ? (
         <span className="flex items-center">
